@@ -1,34 +1,51 @@
 from tkinter import *
-import random as rand
+import random
 
 
-class MultiplicationCalculator:
+class Interface:
     def __init__(self, window):
-        f1 = Frame(window)
-        f2 = Frame(window)
-        number1 = rand.randint(0, 15)
-        number2 = rand.randint(0, 15)
-        self.answer = number1*number2
-        label1 = Label(f1, text=f"{number1} x {number2} = ")
-        self.entry1 = Entry(f1)
-        button1 = Button(f2, text="Check Answer")
-        button2 = Button(f2, text="Next")
-        self.response = Label(f1, text="Please type in your answer")
+        self.c = Calculator()
+        self.question = Label(window, text="")
+        self.question.grid(row=0, column=0)
 
-        label1.grid(row=0, column=0)
-        self.entry1.grid(row=0, column=1)
-        button1.grid(row=0, column=0)
-        button2.grid(row=0, column=1)
-        f1.grid(row=0, column=0)
-        f2.grid(row=1, column=0)
+        self.user_answer = Entry(window)
+        self.user_answer.grid(row=0, column=1)
+
+        check_button = Button(window, text="Check Answer", command=self.checker)
+        check_button.grid(row=1, column=0)
+
+        next_button = Button(window, text="Next", command=self.new_num)
+        next_button.grid(row=1, column=1)
+
+        self.response = Label(window, text="Please type in your answer")
+        self.response.grid(row=0, column=2)
+
+        self.new_num()
 
     def checker(self):
-        if self.entry1.get() == self.answer:
+        if self.c.answer_func(self.user_answer.get()):
             self.response.configure(text="Correct!")
         else:
             self.response.configure(text="Incorrect!")
 
+    def new_num(self):
+        self.c.num_changer()
+        self.question.configure(text=f"{self.c.number1} x {self.c.number2} =")
+
+
+class Calculator:
+    def __init__(self):
+        self.number1 = random.randint(0, 10)
+        self.number2 = random.randint(0, 10)
+
+    def answer_func(self, answer):
+        return answer == str(self.number1*self.number2)
+
+    def num_changer(self):
+        self.number1 = random.randint(0, 10)
+        self.number2 = random.randint(0, 10)
+
 
 root = Tk()
-calculator = MultiplicationCalculator(root)
+calculator = Interface(root)
 root.mainloop()
